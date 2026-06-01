@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SimuNum · Escenario E · Umbrales</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="../css/styles.css"/>
+</head>
+<body>
+
+<!-- ══ NAV ══ -->
+<nav>
+  <div class="nav-links">
+    <a href="../index.html">Inicio</a>
+    <a href="escenario-a.html">A · Transporte</a>
+    <a href="escenario-b.html">B · Reservas</a>
+    <a href="escenario-c.html">C · Precios</a>
+    <a href="escenario-d.html">D · Gasto</a>
+    <a href="escenario-e.html" class="active">E · Umbrales</a>
+  </div>
+</nav>
+
+<!-- ══════════════════════ ESCENARIO E ══════════════════════ -->
+<section id="scenE" class="active">
+  <div class="section-header">
+    <div class="badge badge-e">Escenario E · Raíces de Ecuaciones</div>
+    <h2>Umbrales Críticos de Abastecimiento</h2>
+    <p>Encontrar el punto exacto donde el sistema "cambia de estado": día en que el gasto supera el ingreso familiar, tasa mínima de reposición de carburante, y umbral de descontento social. Compara Bisección, Newton-Raphson y Secante.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><div class="dot dot-e"></div>Seleccionar problema y método</div>
+    <div class="form-grid">
+      <div><label>Tipo de umbral</label>
+        <select id="problemaE" onchange="updateEparams()">
+          <option value="gasto">Umbral: gasto supera ingreso familiar</option>
+          <option value="combustible">Umbral: tasa crítica de reposición</option>
+          <option value="social">Umbral: descontento social (punto de masificación)</option>
+        </select>
+      </div>
+      <div><label>Método</label>
+        <select id="metE">
+          <option value="all">Comparar todos</option>
+          <option value="biseccion">Bisección</option>
+          <option value="newton">Newton-Raphson</option>
+          <option value="secante">Secante</option>
+        </select>
+      </div>
+      <div><label>Tolerancia</label><input type="number" id="tolE" value="1e-6" step="any"></div>
+      <div><label>Máx. iteraciones</label><input type="number" id="maxitE" value="50"></div>
+    </div>
+    <div id="paramsE" class="form-grid" style="margin-top:.75rem"></div>
+    <button class="btn btn-primary" style="margin-top:1rem" onclick="solveE()">Encontrar umbral</button>
+  </div>
+
+  <div id="resultsE" style="display:none">
+    <div class="card">
+      <div class="card-title"><div class="dot dot-e"></div>Función f(x) y raíz encontrada</div>
+      <div class="chart-wrap tall"><canvas id="chartE"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><div class="dot dot-e"></div>Convergencia comparada</div>
+      <div class="chart-wrap"><canvas id="chartE2"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><div class="dot dot-e"></div>Tabla de iteraciones</div>
+      <div class="tbl-wrap"><table id="tblE"></table></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><div class="dot dot-e"></div>Respuestas del escenario</div>
+      <div id="answersE" class="answers-grid"></div>
+      <div id="explainE" class="explain-box" style="margin-top:1rem"></div>
+    </div>
+  </div>
+</section>
+
+<script src="../js/utils.js"></script>
+</body>
+</html>
