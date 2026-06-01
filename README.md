@@ -93,6 +93,16 @@ Encuentra el punto exacto donde el sistema "cambia de estado": el día en que el
 Este proyecto corresponde al **Desafío Final de Métodos Numéricos**, cuyo objetivo es aplicar los métodos estudiados durante la materia para construir herramientas interactivas capaces de modelar problemas reales. El enfoque es analítico y académico: usar la matemática para entender la realidad, contrastar escenarios y demostrar cómo el modelado numérico apoya la toma de decisiones.
 
 ---
+## Conclusiones
+
+Este proyecto demostró que los métodos numéricos no son únicamente herramientas abstractas de cálculo, sino instrumentos capaces de modelar fenómenos sociales y económicos reales con precisión y utilidad práctica.
+
+A lo largo de los cinco escenarios desarrollados se pudo comprobar que la eliminación gaussiana y los métodos iterativos permiten representar redes de distribución complejas y simular el efecto de bloqueos sobre el abastecimiento. Los métodos de integración numérica —trapecio, Simpson 1/3 y 3/8— resultaron efectivos para estimar el gasto acumulado familiar bajo distintos patrones de inflación, evidenciando cómo pequeñas variaciones en la curva de precios impactan significativamente el poder adquisitivo. La interpolación de Lagrange, las diferencias divididas de Newton y los splines cúbicos permitieron reconstruir comportamientos continuos a partir de datos dispersos, lo cual es especialmente relevante en contextos donde la información es incompleta o irregular.
+
+La simulación del vaciado de reservas mediante ecuaciones diferenciales ordinarias mostró que el método de Runge-Kutta de cuarto orden ofrece una aproximación notablemente más precisa que Euler o Heun cuando el consumo varía de forma no lineal, como ocurre en situaciones de pánico social. Finalmente, los métodos de búsqueda de raíces —bisección, Newton-Raphson y secante— resultaron ser los más directamente interpretables en términos de política pública, ya que permiten identificar con exactitud el umbral a partir del cual un sistema entra en crisis.
+En conjunto, el proyecto confirma que el modelado numérico es una herramienta valiosa para anticipar puntos de quiebre, comparar escenarios y fundamentar decisiones en contextos de incertidumbre. La implementación en el navegador, sin dependencias externas, refuerza además la accesibilidad y replicabilidad de los modelos desarrollados.
+
+---
 
 ## Autor
 
