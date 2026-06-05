@@ -1,0 +1,1445 @@
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Métodos Numéricos · Crisis de Abastecimiento</title>
+
+  <!-- 1. Fuentes -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Mono:wght@400;600&family=Sora:wght@300;400;600;700&display=swap"
+    rel="stylesheet">
+
+  <!-- 2. Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- 3. Tu CSS (siempre al último para poder pisar a Bootstrap) -->
+  <link rel="stylesheet" href="css/styles.css">
+
+  <!-- 4. Chart.js va en el <head> solo si lo usas en todos los escenarios -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+
+<body>
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner">
+      <a class="nav-brand" href="#" onclick="showSection('home')"> MétodosNum</a>
+      <button class="nav-btn active" onclick="showSection('home',this)">Inicio</button>
+      <button class="nav-btn" onclick="showSection('secA',this)">🟡 A · Transporte</button>
+      <button class="nav-btn" onclick="showSection('secB',this)">🔴 B · Reservas</button>
+      <button class="nav-btn" onclick="showSection('secC',this)">🔵 C · Precios</button>
+      <button class="nav-btn" onclick="showSection('secD',this)">🟢 D · Gasto Familiar</button>
+      <button class="nav-btn" onclick="showSection('secE',this)">🟣 E · Umbrales</button>
+      <button class="nav-btn" onclick="showSection('secConcl',this)"> Conclusiones</button>
+    </div>
+  </nav>
+
+  <!-- ═══════════════════════════════════════ HOME ═══════════════════════════════════════ -->
+  <div id="home" class="section section-home">
+    <div class="hero">
+      <div class="hero-grid"></div>
+      <div class="hero-glow"></div>
+      <div style="position:relative;">
+        <div
+          style="font-family:var(--mono);font-size:.72rem;letter-spacing:.15em;color:var(--text3);text-transform:uppercase;margin-bottom:16px;">
+          Desafío Final · Métodos Numéricos</div>
+        <h1>Simulación Numérica de<br><em>Crisis de Abastecimiento</em></h1>
+        <p class="hero-sub">Una plataforma interactiva que convierte matemáticas en comprensión real: modela cómo
+          fluctúan precios, colapsan reservas y se distribuyen recursos en momentos de crisis.</p>
+        <div class="badge-row">
+          <span class="badge badge-a">A · Sistemas Lineales</span>
+          <span class="badge badge-b">B · Ec. Diferenciales</span>
+          <span class="badge badge-c">C · Interpolación</span>
+          <span class="badge badge-d">D · Integración Numérica</span>
+          <span class="badge badge-e">E · Raíces de Ec.</span>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="container-main">
+      <div class="card-dark" style="margin-bottom:40px;">
+        <div class="card-label">Contexto del Proyecto</div>
+        <p style="color:var(--text2);margin-bottom:12px;">Bolivia enfrenta escasez de combustible, largas filas en
+          surtidores, bloqueos de caminos, aumento de precios en mercados y conflictos sociales. Este proyecto simula
+          matemáticamente cada uno de estos fenómenos usando los métodos numéricos aprendidos en clase.
+        </p>
+        <p style="color:var(--text2);margin-bottom:12px;"> Aplicamos <strong style="color:var(--text)">métodos
+            numéricos</strong> para modelar, analizar y visualizar la escasez de carburantes, el alza de precios y la
+          dinámica social que vive Bolivia hoy. La matemática como herramienta de comprensión de la realidad.
+        </p>
+        <div class="alert-info-custom">💡 <strong>Cómo usar esta plataforma:</strong> Navega a cada módulo (A–E), lee el
+          contexto narrativo, ajusta los parámetros con los controles y observa cómo el algoritmo calcula la solución
+          paso a paso.</div>
+      </div>
+
+      <h2 style="font-family:var(--serif);font-size:1.8rem;margin-bottom:8px;">Los 5 Escenarios</h2>
+      <p style="color:var(--text2);margin-bottom:4px;">Selecciona un módulo para comenzar la simulación</p>
+      <div class="scenario-grid">
+        <a class="scenario-card" onclick="showSection('secA')">
+          <div class="sc-img-wrap">
+            <img src="img/transporte.jpg" alt="Camión de combustible en ruta">
+          </div>
+          <div class="sc-body">
+            <div class="sc-tag tag-a">Escenario A</div>
+            <div class="sc-title">Optimización del Transporte</div>
+            <div class="sc-desc">Distribuir combustible desde plantas hacia zonas urbanas cuando las rutas pueden estar
+              bloqueadas.</div>
+            <div class="sc-method">Gauss-Seidel · Jacobi · SOR</div>
+          </div>
+        </a>
+
+        <a class="scenario-card" onclick="showSection('secB')">
+          <div class="sc-img-wrap">
+            <img src="img/reservas.jpg" alt="Tanques de reserva de combustible">
+          </div>
+          <div class="sc-body">
+            <div class="sc-tag tag-b">Escenario B</div>
+            <div class="sc-title">Vaciado de Reservas</div>
+            <div class="sc-desc">Simula cómo las reservas de una planta se agotan con el tiempo cuando el consumo supera
+              el reabastecimiento. ¿En cuántos días llegamos a nivel crítico?</div>
+            <div class="sc-method">Euler · Heun · Runge-Kutta 4</div>
+          </div>
+        </a>
+
+        <a class="scenario-card" onclick="showSection('secC')">
+          <div class="sc-img-wrap">
+            <img src="img/precios.jpg" alt="Mercado de alimentos con precios">
+          </div>
+          <div class="sc-body">
+            <div class="sc-tag tag-c">Escenario C</div>
+            <div class="sc-title">Curva de Precios</div>
+            <div class="sc-desc">Reconstruye la curva continua de precios de alimentos a partir de datos dispersos de
+              mercado. Estima el precio en cualquier día del mes.</div>
+            <div class="sc-method">Lagrange · Newton · Splines</div>
+          </div>
+        </a>
+
+        <a class="scenario-card" onclick="showSection('secD')">
+          <div class="sc-img-wrap">
+            <img src="img/gasto.jpg" alt="Familia revisando gastos del hogar">
+          </div>
+          <div class="sc-body">
+            <div class="sc-tag tag-d">Escenario D</div>
+            <div class="sc-title">Gasto Familiar Acumulado</div>
+            <div class="sc-desc">Calcula el gasto mensual real de una familia cuando los precios suben progresivamente.
+              Cuantifica la pérdida del poder adquisitivo.</div>
+            <div class="sc-method">Trapecio · Simpson 1/3 · Simpson 3/8</div>
+          </div>
+        </a>
+
+        <a class="scenario-card" onclick="showSection('secE')">
+          <div class="sc-img-wrap">
+            <img src="img/umbrales.jpg" alt="Gráfica de punto crítico de equilibrio">
+          </div>
+          <div class="sc-body">
+            <div class="sc-tag tag-e">Escenario E</div>
+            <div class="sc-title">Umbrales Críticos</div>
+            <div class="sc-desc">Encuentra el punto exacto en que el costo supera el ingreso familiar, la reserva se
+              agota o la demanda iguala la oferta. Raíces de ecuaciones no lineales.</div>
+            <div class="sc-method">Bisección · Newton-Raphson · Secante</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ ESCENARIO A ═══════════════════════════════════════ -->
+  <div id="secA" class="section sec-a">
+    <div class="container-main">
+      <div class="mod-header">
+        <div class="mod-tag tag-a">Escenario A · Sistemas de Ecuaciones Lineales</div>
+        <h1 class="mod-title">Red de Distribución de Combustible</h1>
+        <p class="mod-subtitle">Optimización del abastecimiento desde plantas hacia zonas urbanas con rutas
+          condicionadas</p>
+      </div>
+      <div class="divider"></div>
+
+      <!-- 1. Contexto narrativo -->
+      <div class="card-dark">
+        <div class="card-label">1 · Contexto del Escenario</div>
+
+        <p style="color:var(--text2); margin-bottom:12px;">
+          Bolivia atraviesa una crisis de abastecimiento de combustible. Tres plantas de
+          distribución operan con capacidad limitada y deben abastecer a tres zonas de la
+          ciudad de La Paz. Varias rutas están cortadas por bloqueos, lo que restringe qué
+          planta puede llegar a qué zona. Este módulo modela matemáticamente cómo distribuir
+          el combustible disponible de forma óptima, respetando capacidades de producción,
+          demandas mínimas y rutas disponibles.
+        </p>
+
+        <div class="narrative">
+          <p>
+            Son las 6 de la mañana y ya tienes tres reportes urgentes sobre tu escritorio: la Zona Norte reporta 
+            filas de tres horas en las estaciones de servicio, la Zona Centro tiene stock para solo dos días más, 
+            y la Zona Sur acaba de quedarse sin reservas. Como Jefe de Logística de la distribuidora estatal, 
+            tu misión es determinar exactamente cuántos litros debe enviar cada planta a cada zona, satisfaciendo 
+            la demanda total sin exceder las capacidades de producción. Una mala distribución deja alguna zona 
+            sin combustible; un exceso innecesario bloquea recursos que otra necesita.
+          </p>
+        </div>
+      </div>
+
+      <!-- 2. Explicación del problema -->
+      <div class="card-dark">
+        <div class="card-label">2 · El Problema Matemático</div>
+        <div class="card-title">¿Por qué esto es un sistema de ecuaciones lineales?</div>
+        <p style="color:var(--text2);font-size:.9rem;margin-bottom:12px;">Cada zona tiene una <strong
+            style="color:var(--text)">demanda exacta</strong> que debe satisfacerse sumando los envíos de todas las
+          plantas que la abastecen. Cada planta tiene una <strong style="color:var(--text)">capacidad de
+            producción</strong> que no puede superarse. Estas relaciones forman un sistema de ecuaciones donde las
+          incógnitas son los flujos de distribución.</p>
+        <p style="color:var(--text2);font-size:.9rem;">Modelamos esto como <strong style="color:var(--text)">Ax =
+            b</strong>, donde A contiene los coeficientes de distribución, x son los flujos a encontrar y b son las
+          demandas. Los métodos iterativos (Jacobi, Gauss-Seidel, SOR) permiten encontrar esta solución aunque el
+          sistema sea muy grande.</p>
+      </div>
+
+      <!-- 3. Modelo matemático -->
+      <div class="card-dark">
+        <div class="card-label">3 · Modelo Matemático</div>
+        <div class="math-box">
+          <span class="comment">// Sistema: A·x = b</span>
+          a₁₁·x₁ + a₁₂·x₂ + a₁₃·x₃ = b₁ <span class="comment">← demanda Zona Norte</span>
+          a₂₁·x₁ + a₂₂·x₂ + a₂₃·x₃ = b₂ <span class="comment">← demanda Zona Centro</span>
+          a₃₁·x₁ + a₃₂·x₂ + a₃₃·x₃ = b₃ <span class="comment">← demanda Zona Sur</span>
+
+          <span class="comment">// Gauss-Seidel: actualización por componente</span>
+          xᵢ⁽ᵏ⁺¹⁾ = (bᵢ - Σ aᵢⱼ·xⱼ⁽ᵏ⁺¹⁾ - Σ aᵢⱼ·xⱼ⁽ᵏ⁾) / aᵢᵢ
+        </div>
+        <p style="color:var(--text2);font-size:.85rem;margin-top:8px;">El método Gauss-Seidel itera actualizando cada
+          incógnita con los valores más recientes disponibles, convergiendo más rápido que Jacobi. SOR (Relajación
+          Sucesiva) añade un factor ω que acelera aún más la convergencia.</p>
+      </div>
+
+      <!-- 4. Glosario -->
+      <div class="card-dark">
+        <div class="card-label">4 · Glosario de Variables</div>
+        <table class="glossary">
+          <tr>
+            <th>Variable</th>
+            <th>Significado en la vida real</th>
+            <th>Unidad</th>
+          </tr>
+          <tr>
+            <td>aᵢⱼ</td>
+            <td>Coeficiente que representa la fracción del flujo de la fuente j que aporta a la demanda i (eficiencia de
+              la ruta)</td>
+            <td>adimensional</td>
+          </tr>
+          <tr>
+            <td>xⱼ</td>
+            <td>Volumen de combustible enviado desde la planta/fuente j (la incógnita a resolver)</td>
+            <td>miles de litros</td>
+          </tr>
+          <tr>
+            <td>bᵢ</td>
+            <td>Demanda total de la zona i — cuánto combustible necesita esa zona para operar normalmente</td>
+            <td>miles de litros/día</td>
+          </tr>
+          <tr>
+            <td>ω</td>
+            <td>Factor de relajación SOR: valor entre 1 y 2 que acelera la convergencia. ω=1 → Gauss-Seidel puro</td>
+            <td>adimensional [1,2]</td>
+          </tr>
+          <tr>
+            <td>ε (tolerancia)</td>
+            <td>Error máximo aceptable. El algoritmo para cuando el cambio entre iteraciones es menor que este valor
+            </td>
+            <td>fracción decimal</td>
+          </tr>
+          <tr>
+            <td>k (iteración)</td>
+            <td>Número de veces que el algoritmo ha refinado su estimación de la solución</td>
+            <td>conteo entero</td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- 5. Zona de interacción -->
+      <div class="card-dark">
+        <div class="card-label">5 · Zona de Interacción — Ajusta los Parámetros</div>
+        <div class="row g-3">
+          <div class="col-12">
+            <div class="card-title">Matriz A (coeficientes de distribución) y vector b (demandas)</div>
+            <p style="color:var(--text3);font-size:.8rem;margin-bottom:12px;">Cada fila es una ecuación (zona). Cada
+              columna de A es una fuente de suministro. El vector b es la demanda que debe satisfacerse.</p>
+            <div class="matrix-wrap">
+              <table class="matrix-table">
+                <tr>
+                  <td><span style="color:var(--text3);font-family:var(--mono);font-size:.8rem;">A =</span></td>
+                  <td><span class="matrix-bracket">[</span></td>
+                  <td>
+                    <table style="border-collapse:separate;border-spacing:4px;">
+                      <tr>
+                        <td><input class="input-dark" id="a11" type="number" value="4"
+                            style="width:70px;text-align:center;" title="Fila 1 (Zona Norte), Fuente 1"></td>
+                        <td><input class="input-dark" id="a12" type="number" value="1"
+                            style="width:70px;text-align:center;" title="Fila 1 (Zona Norte), Fuente 2"></td>
+                        <td><input class="input-dark" id="a13" type="number" value="0"
+                            style="width:70px;text-align:center;"
+                            title="Fila 1 (Zona Norte), Fuente 3 (0=ruta bloqueada)"></td>
+                      </tr>
+                      <tr>
+                        <td><input class="input-dark" id="a21" type="number" value="2"
+                            style="width:70px;text-align:center;"></td>
+                        <td><input class="input-dark" id="a22" type="number" value="5"
+                            style="width:70px;text-align:center;"></td>
+                        <td><input class="input-dark" id="a23" type="number" value="1"
+                            style="width:70px;text-align:center;"></td>
+                      </tr>
+                      <tr>
+                        <td><input class="input-dark" id="a31" type="number" value="1"
+                            style="width:70px;text-align:center;"></td>
+                        <td><input class="input-dark" id="a32" type="number" value="2"
+                            style="width:70px;text-align:center;"></td>
+                        <td><input class="input-dark" id="a33" type="number" value="6"
+                            style="width:70px;text-align:center;"></td>
+                      </tr>
+                    </table>
+                  </td>
+                  <td><span class="matrix-bracket">]</span></td>
+                  <td style="padding:0 12px;color:var(--text3);font-family:var(--mono);">·</td>
+                  <td><span class="matrix-bracket">[</span></td>
+                  <td>
+                    <table style="border-collapse:separate;border-spacing:4px;">
+                      <tr>
+                        <td><input class="input-dark" id="x1_0" type="number" value="0"
+                            style="width:60px;text-align:center;" title="Estimación inicial x₁"></td>
+                      </tr>
+                      <tr>
+                        <td><input class="input-dark" id="x2_0" type="number" value="0"
+                            style="width:60px;text-align:center;" title="Estimación inicial x₂"></td>
+                      </tr>
+                      <tr>
+                        <td><input class="input-dark" id="x3_0" type="number" value="0"
+                            style="width:60px;text-align:center;" title="Estimación inicial x₃"></td>
+                      </tr>
+                    </table>
+                  </td>
+                  <td><span class="matrix-bracket">]</span></td>
+                  <td style="padding:0 12px;color:var(--text3);font-family:var(--mono);">=</td>
+                  <td><span class="matrix-bracket">[</span></td>
+                  <td>
+                    <table style="border-collapse:separate;border-spacing:4px;">
+                      <tr>
+                        <td><input class="input-dark" id="b1" type="number" value="24"
+                            style="width:70px;text-align:center;" title="Demanda Zona Norte (miles de litros/día)"></td>
+                      </tr>
+                      <tr>
+                        <td><input class="input-dark" id="b2" type="number" value="30"
+                            style="width:70px;text-align:center;" title="Demanda Zona Centro (miles de litros/día)">
+                        </td>
+                      </tr>
+                      <tr>
+                        <td><input class="input-dark" id="b3" type="number" value="24"
+                            style="width:70px;text-align:center;" title="Demanda Zona Sur (miles de litros/día)"></td>
+                      </tr>
+                    </table>
+                  </td>
+                  <td><span class="matrix-bracket">]</span></td>
+                </tr>
+              </table>
+            </div>
+            <p style="color:var(--text3);font-size:.75rem;margin-top:8px;">💡 Poner 0 en a₁₃ simula que la ruta de la
+              Fuente 3 hacia la Zona Norte está <strong>bloqueada</strong>. Observa cómo cambia la solución.</p>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="form-label-custom">Método de Resolución</label>
+              <select class="select-dark" id="metodA">
+                <option value="gs">Gauss-Seidel</option>
+                <option value="jacobi">Jacobi</option>
+                <option value="sor">SOR (Relajación)</option>
+              </select>
+              <div class="form-hint">Gauss-Seidel suele converger más rápido. SOR es aún más rápido con ω correcto.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="form-label-custom">Tolerancia ε (error máximo aceptable)</label>
+              <select class="select-dark" id="tolA">
+                <option value="0.001">10⁻³ (solución rápida, menos precisa)</option>
+                <option value="0.0001" selected>10⁻⁴ (equilibrio precision/velocidad)</option>
+                <option value="0.00001">10⁻⁵ (alta precisión)</option>
+              </select>
+              <div class="form-hint">Cuanto menor, más iteraciones necesita el algoritmo pero mayor es la exactitud.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4" id="sor-panel" style="display:none;">
+            <div class="form-group">
+              <label class="form-label-custom">Factor de Relajación ω (solo SOR)</label>
+              <div class="range-wrap">
+                <input type="range" min="1" max="1.99" step="0.01" value="1.25" id="omegaA"
+                  oninput="document.getElementById('omegaVal').textContent=this.value">
+                <span class="range-val" id="omegaVal">1.25</span>
+              </div>
+              <div class="form-hint">ω = 1: igual a Gauss-Seidel. ω > 1: acelera convergencia. ω ≥ 2: puede divergir.
+              </div>
+            </div>
+          </div>
+          <div class="col-12 pt-2">
+            <button class="btn-run" onclick="runEscenarioA()">▶ Ejecutar Simulación</button>
+            <span id="statusA"
+              style="margin-left:16px;font-family:var(--mono);font-size:.8rem;color:var(--text3);"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. Caja de cristal -->
+      <div class="crystal-box" id="crystalA" style="display:none;">
+        <h4>🔬 La "Caja de Cristal" — Primeras Iteraciones Paso a Paso</h4>
+        <div id="crystalAContent"></div>
+      </div>
+
+      <!-- 7. Resultados -->
+      <div id="resultsA" style="display:none;">
+        <div class="stat-grid" id="statsA"></div>
+        <div class="row g-3">
+          <div class="col-lg-6">
+            <div class="chart-wrap">
+              <div class="chart-title">Evolución de la Solución por Iteración</div>
+              <canvas id="chartA"></canvas>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="chart-wrap">
+              <div class="chart-title">Distribución Final del Combustible</div>
+              <canvas id="chartA2"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="card-dark" style="margin-top:16px;">
+          <div class="card-label">Tabla de Iteraciones</div>
+          <div style="overflow-x:auto;">
+            <table class="results-table" id="tableA"></table>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8. Análisis -->
+      <div class="analysis-block" id="analysisA" style="display:none;">
+        <h3>💡 Análisis, Preguntas Guía y Conclusiones</h3>
+        <div class="qa-item">
+          <div class="qa-q">¿Cuánto debe enviarse a cada zona?</div>
+          <div class="qa-a dynamic" id="qa-a1">—</div>
+        </div>
+        <div class="qa-item">
+          <div class="qa-q">¿Qué pasa si una ruta se bloquea? (Prueba poniendo un coeficiente en 0)</div>
+          <div class="qa-a">Si un coeficiente aᵢⱼ = 0, esa ruta queda desactivada. El sistema rebalanceará los flujos a
+            través de las rutas disponibles. Si el sistema se vuelve singular (sin solución), recibirás una advertencia
+            — lo que en la vida real significa que la demanda de esa zona <strong>no puede satisfacerse</strong> con las
+            rutas activas.</div>
+        </div>
+        <div class="qa-item">
+          <div class="qa-q">¿El sistema es estable o sensible a pequeños cambios?</div>
+          <div class="qa-a dynamic" id="qa-a3">—</div>
+        </div>
+        <div class="qa-item">
+          <div class="qa-q">¿La solución cambia mucho si la demanda aumenta?</div>
+          <div class="qa-a">Incrementa los valores de b (demandas) y observa cómo cambia x. En un sistema bien
+            condicionado, un incremento proporcional en b genera un incremento proporcional en x. En un sistema mal
+            condicionado, pequeños cambios en b pueden generar soluciones muy diferentes.</div>
+        </div>
+        <div class="conclusion-box" id="conclusionA"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ ESCENARIO B ═══════════════════════════════════════ -->
+  <div id="secB" class="section sec-b">
+    <div class="container-main">
+      <div class="mod-header">
+        <div class="mod-tag tag-b">Escenario B · Ecuaciones Diferenciales Ordinarias</div>
+        <h1 class="mod-title">Vaciado Crítico de Reservas</h1>
+        <p class="mod-subtitle">Simula la evolución temporal de las reservas de combustible ante demanda creciente y
+          reabastecimiento limitado</p>
+      </div>
+      <div class="divider"></div>
+
+      <div class="card-dark">
+        <div class="card-label">1 · Contexto del Escenario</div>
+        <p style="color:var(--text2); margin-bottom:12px;">
+          Las largas filas en los surtidores de La Paz no son casualidad: las reservas en plantas como Senkata se vacían
+          más rápido de lo que se reponen. Este proceso se describe con el modelo diferencial R'(t) = entrada(t) − consumo(t):
+          cuando el consumo supera la entrada — especialmente en crisis o con rutas bloqueadas — la reserva cae de forma continua
+          y predecible. Este módulo simula cuántos días quedan antes de que la reserva llegue al nivel crítico donde la planta ya
+          no puede operar.
+        </p>
+        <div class="narrative">
+          <p>Es lunes por la mañana y el encargado de la planta de almacenamiento más grande de la ciudad revisa sus medidores: las 
+            reservas están al 75%. En condiciones normales, nada alarmante. Pero esta no es una semana normal: los rumores de escasez 
+            han disparado la demanda, y el camión cisterna de reabastecimiento que debía llegar ayer sigue sin aparecer. ¿En cuántos 
+            días las reservas caerán por debajo del 20%, el umbral mínimo de operación segura? Una ecuación diferencial ordinaria 
+            responde esa pregunta con precisión.</p>
+        </div>
+      </div>
+
+      <div class="card-dark">
+        <div class="card-label">2 · El Problema Matemático</div>
+        <p style="color:var(--text2);font-size:.9rem;margin-bottom:12px;">Las reservas de combustible <strong
+            style="color:var(--text)">cambian continuamente en el tiempo</strong>. La tasa de cambio R'(t) depende de la
+          diferencia entre cuánto entra (reabastecimiento) y cuánto sale (consumo). Esta relación es una <strong
+            style="color:var(--text)">ecuación diferencial ordinaria de primer orden</strong>: una ecuación que
+          relaciona una función con su propia derivada.</p>
+        <p style="color:var(--text2);font-size:.9rem;">Los métodos numéricos (Euler, Heun, RK4) aproximan la solución
+          avanzando en pequeños pasos de tiempo Δt, calculando el estado futuro a partir del estado presente. RK4 usa
+          cuatro estimaciones de la pendiente en cada paso, siendo el más preciso de los tres.</p>
+      </div>
+
+      <div class="card-dark">
+        <div class="card-label">3 · Modelo Matemático</div>
+        <div class="math-box">
+          <span class="comment">// La reserva evoluciona según:</span>
+          dR/dt = E(t) - C(t)
+
+          <span class="comment">// Donde:</span>
+          E(t) = tasa_entrada <span class="comment">← litros que llegan por día</span>
+          C(t) = consumo_base × (1 + α·t) <span class="comment">← consumo que crece con el tiempo</span>
+
+          <span class="comment">// Runge-Kutta 4 (el más preciso):</span>
+          k₁ = f(tₙ, Rₙ)
+          k₂ = f(tₙ + h/2, Rₙ + h·k₁/2)
+          k₃ = f(tₙ + h/2, Rₙ + h·k₂/2)
+          k₄ = f(tₙ + h, Rₙ + h·k₃)
+          Rₙ₊₁ = Rₙ + (h/6)·(k₁ + 2k₂ + 2k₃ + k₄)
+        </div>
+      </div>
+
+      <div class="card-dark">
+        <div class="card-label">4 · Glosario de Variables</div>
+        <table class="glossary">
+          <tr>
+            <th>Variable</th>
+            <th>Significado en la vida real</th>
+            <th>Unidad</th>
+          </tr>
+          <tr>
+            <td>R(t)</td>
+            <td>Reserva disponible en el momento t — el porcentaje del tanque que aún tiene combustible</td>
+            <td>% (0 a 100)</td>
+          </tr>
+          <tr>
+            <td>R₀</td>
+            <td>Reserva inicial al comenzar la simulación (el "lunes por la mañana")</td>
+            <td>%</td>
+          </tr>
+          <tr>
+            <td>E</td>
+            <td>Tasa de entrada: cuánto combustible llega diariamente por reabastecimiento (si hay)</td>
+            <td>% / día</td>
+          </tr>
+          <tr>
+            <td>C₀</td>
+            <td>Consumo base diario en condiciones normales, sin factor de pánico o escasez</td>
+            <td>% / día</td>
+          </tr>
+          <tr>
+            <td>α</td>
+            <td>Tasa de crecimiento del consumo: qué tan rápido aumenta la demanda cada día (0 = constante)</td>
+            <td>fracción/día</td>
+          </tr>
+          <tr>
+            <td>R_crítica</td>
+            <td>Nivel mínimo de reserva bajo el cual la planta no puede operar con seguridad</td>
+            <td>%</td>
+          </tr>
+          <tr>
+            <td>h (paso)</td>
+            <td>Tamaño del paso de tiempo en la simulación — cuán fino es el mallado temporal</td>
+            <td>días</td>
+          </tr>
+          <tr>
+            <td>t_final</td>
+            <td>Horizonte de la simulación: cuántos días hacia adelante se proyecta</td>
+            <td>días</td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="card-dark">
+        <div class="card-label">5 · Zona de Interacción</div>
+        <div class="row g-3">
+          <div class="col-md-3">
+            <div class="form-group">
+              <label class="form-label-custom">Reserva Inicial R₀ (%)</label>
+              <div class="range-wrap">
+                <input type="range" min="10" max="100" step="1" value="80" id="r0B"
+                  oninput="document.getElementById('r0BVal').textContent=this.value+'%'">
+                <span class="range-val" id="r0BVal">80%</span>
+              </div>
+              <div class="form-hint">Nivel del tanque al inicio de la simulación</div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <label class="form-label-custom">Tasa de Entrada E (% / día)</label>
+              <input class="input-dark" type="number" id="entradaB" value="3" min="0" max="20" step="0.5">
+              <div class="form-hint">Combustible que llega diariamente. Ponlo en 0 para simular corte total de
+                suministro.</div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <label class="form-label-custom">Consumo Base C₀ (% / día)</label>
+              <input class="input-dark" type="number" id="consumoB" value="7" min="1" max="30" step="0.5">
+              <div class="form-hint">Consumo diario en condiciones normales sin crisis</div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <label class="form-label-custom">Factor de Pánico α (crecim. consumo)</label>
+              <div class="range-wrap">
+                <input type="range" min="0" max="0.3" step="0.01" value="0.05" id="alphaB"
+                  oninput="document.getElementById('alphaBVal').textContent=parseFloat(this.value).toFixed(2)">
+                <span class="range-val" id="alphaBVal">0.05</span>
+              </div>
+              <div class="form-hint">α=0: consumo constante. α>0: demanda crece cada día (efecto pánico).</div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <label class="form-label-custom">Nivel Crítico R_crítica (%)</label>
+              <input class="input-dark" type="number" id="rcritB" value="20" min="5" max="50" step="1">
+              <div class="form-hint">Umbral de alerta roja — por debajo de este nivel la planta no opera con seguridad
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <label class="form-label-custom">Horizonte (días)</label>
+              <input class="input-dark" type="number" id="tfinalB" value="30" min="5" max="90" step="1">
+              <div class="form-hint">Cuántos días hacia adelante simular</div>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <label class="form-label-custom">Método Numérico</label>
+              <select class="select-dark" id="metodB">
+                <option value="euler">Euler (orden 1)</option>
+                <option value="heun">Heun / Euler Mejorado (orden 2)</option>
+                <option value="rk4" selected>Runge-Kutta 4 (orden 4)</option>
+                <option value="todos">Comparar los 3 métodos</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="form-group">
+              <label class="form-label-custom">Paso de tiempo h (días)</label>
+              <select class="select-dark" id="hB">
+                <option value="1" selected>h = 1 día</option>
+                <option value="0.5">h = 0.5 días</option>
+                <option value="0.25">h = 0.25 días (más preciso)</option>
+              </select>
+              <div class="form-hint">Pasos menores dan resultados más precisos pero requieren más cálculos</div>
+            </div>
+          </div>
+          <div class="col-12 pt-2">
+            <button class="btn-run" onclick="runEscenarioB()">▶ Simular Vaciado</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="crystal-box" id="crystalB" style="display:none;">
+        <h4>🔬 Primeras Iteraciones — Paso a Paso</h4>
+        <div id="crystalBContent"></div>
+      </div>
+
+      <div id="resultsB" style="display:none;">
+        <div class="stat-grid" id="statsB"></div>
+        <div class="chart-wrap">
+          <div class="chart-title">Evolución de Reservas en el Tiempo</div>
+          <canvas id="chartB"></canvas>
+        </div>
+        <div class="card-dark" style="margin-top:16px;">
+          <div class="card-label">Tabla de Valores</div>
+          <div style="overflow-x:auto;max-height:300px;overflow-y:auto;">
+            <table class="results-table" id="tableB"></table>
+          </div>
+        </div>
+      </div>
+
+      <div class="analysis-block" id="analysisB" style="display:none;">
+        <h3>💡 Análisis, Preguntas Guía y Conclusiones</h3>
+        <div class="qa-item">
+          <div class="qa-q">¿En cuántos días la reserva llega a nivel crítico?</div>
+          <div class="qa-a dynamic" id="qa-b1">—</div>
+        </div>
+        <div class="qa-item">
+          <div class="qa-q">¿Qué diferencia hay entre Euler, Heun y RK4?</div>
+          <div class="qa-a">Euler es el método más simple: avanza usando solo la pendiente al inicio del paso. Heun
+            corrige ese avance usando la pendiente al final también (promedio). RK4 usa 4 evaluaciones de la pendiente
+            ponderadas, logrando errores de orden O(h⁵) por paso — mucho más preciso. Usa "Comparar los 3" para verlo
+            visualmente.</div>
+        </div>
+        <div class="qa-item">
+          <div class="qa-q">¿Qué pasa si se corta el suministro (E=0)?</div>
+          <div class="qa-a dynamic" id="qa-b3">—</div>
+        </div>
+        <div class="conclusion-box" id="conclusionB"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ ESCENARIO C ═══════════════════════════════════════ -->
+  <div id="secC" class="section sec-c">
+    <div class="container-main">
+      <div class="mod-header">
+        <div class="mod-tag tag-c">Escenario C · Interpolación Numérica</div>
+        <h1 class="mod-title">Curva Continua de Precios</h1>
+        <p class="mod-subtitle">Reconstruye la evolución de precios a partir de datos dispersos de mercado usando
+          polinomios interpoladores</p>
+      </div>
+      <div class="divider"></div>
+
+      <div class="card-dark">
+        <div class="card-label">1 · Contexto del Escenario</div>
+        <p style="color:var(--text2); margin-bottom:12px;">
+          El precio de la papa, el pollo y otros básicos sube semana a semana en mercados como Rodríguez o Villa Fátima,
+          pero los registros de precios no son diarios — solo existen datos para algunos días del mes. La interpolación
+          numérica permite reconstruir la curva continua de precios a partir de esos puntos dispersos, estimando con alta
+          precisión el valor en cualquier día sin registro. Es como trazar la curva más razonable entre puntos conocidos 
+          de un mapa de precios.
+        </p>
+        <div class="narrative">
+          <p>La encargada de estadísticas de un municipio debe presentar mañana un informe sobre el comportamiento del precio de la papa 
+            durante el último mes de crisis. El problema: su equipo solo pudo registrar precios en 6 días específicos. El alcalde quiere 
+            saber qué precio había el día 7, el día 12 y el día 18 — días sin dato registrado. Con interpolación numérica, es posible 
+            construir una función matemática continua que pase exactamente por los datos conocidos y estime los valores faltantes con 
+            precisión justificable.</p>
+        </div>
+      </div>
+
+      <div class="card-dark">
+        <div class="card-label">2 · El Problema Matemático</div>
+        <p style="color:var(--text2);font-size:.9rem;margin-bottom:10px;">Tenemos n+1 pares de datos (tᵢ, pᵢ) — días y
+          precios observados. La interpolación construye un polinomio P(t) de grado ≤ n que satisface P(tᵢ) = pᵢ para
+          todos los puntos conocidos. Luego podemos evaluar P(t) en cualquier día t para estimar el precio.</p>
+        <p style="color:var(--text2);font-size:.9rem;">Lagrange construye el polinomio como suma de términos base.
+          Newton usa diferencias divididas, más eficiente para agregar nuevos puntos. Los Splines cúbicos conectan
+          segmentos de polinomios de grado 3, evitando las oscilaciones del polinomio único de alto grado.</p>
+      </div>
+
+      <div class="card-dark">
+        <div class="card-label">3 · Modelo Matemático</div>
+        <div class="math-box">
+          <span class="comment">// Lagrange:</span>
+          P(t) = Σᵢ pᵢ · Lᵢ(t)
+          Lᵢ(t) = Π_{j≠i} (t - tⱼ) / (tᵢ - tⱼ)
+
+          <span class="comment">// Newton (diferencias divididas):</span>
+          P(t) = f[t₀] + f[t₀,t₁](t-t₀) + f[t₀,t₁,t₂](t-t₀)(t-t₁) + ...
+
+          <span class="comment">// Spline cúbico en intervalo [tᵢ, tᵢ₊₁]:</span>
+          Sᵢ(t) = aᵢ + bᵢ(t-tᵢ) + cᵢ(t-tᵢ)² + dᵢ(t-tᵢ)³
+          <span class="comment">// (con condiciones de continuidad de S, S', S'')</span>
+        </div>
+      </div>
+
+      <div class="card-dark">
+        <div class="card-label">4 · Glosario de Variables</div>
+        <table class="glossary">
+          <tr>
+            <th>Variable</th>
+            <th>Significado en la vida real</th>
+            <th>Unidad</th>
+          </tr>
+          <tr>
+            <td>tᵢ</td>
+            <td>Día del mes en que se registró el precio (el nodo de interpolación)</td>
+            <td>día (1–30)</td>
+          </tr>
+          <tr>
+            <td>pᵢ</td>
+            <td>Precio registrado en ese día — el dato real observado en el mercado</td>
+            <td>Bs (bolivianos)</td>
+          </tr>
+          <tr>
+            <td>P(t)</td>
+            <td>El polinomio interpolador — la curva matemática que aproxima el precio en cualquier día t</td>
+            <td>Bs</td>
+          </tr>
+          <tr>
+            <td>t_eval</td>
+            <td>El día específico en que quieres estimar el precio (día sin dato)</td>
+            <td>día</td>
+          </tr>
+          <tr>
+            <td>Lᵢ(t)</td>
+            <td>Polinomio base de Lagrange para el nodo i — vale 1 en tᵢ y 0 en todos los demás nodos</td>
+            <td>adimensional</td>
+          </tr>
+          <tr>
+            <td>f[tᵢ,...,tⱼ]</td>
+            <td>Diferencia dividida de Newton — mide la "curvatura promedio" entre varios puntos</td>
+            <td>Bs/día^n</td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="card-dark">
+        <div class="card-label">5 · Zona de Interacción — Datos de Precios</div>
+        <p style="color:var(--text2);font-size:.85rem;margin-bottom:16px;">Ingresa hasta 8 pares (día, precio)
+          observados en el mercado. Luego elige el día a estimar.</p>
+        <div id="puntosC">
+          <div class="row g-2 mb-2 punto-row">
+            <div class="col-5"><input class="input-dark" type="number" placeholder="Día (ej: 1)" value="1"
+                data-type="t"></div>
+            <div class="col-5"><input class="input-dark" type="number" placeholder="Precio Bs" value="8" data-type="p">
+            </div>
+            <div class="col-2"><button class="btn-secondary" onclick="removePuntoC(this)">✕</button></div>
+          </div>
+          <div class="row g-2 mb-2 punto-row">
+            <div class="col-5"><input class="input-dark" type="number" value="5" data-type="t"></div>
+            <div class="col-5"><input class="input-dark" type="number" value="10" data-type="p"></div>
+            <div class="col-2"><button class="btn-secondary" onclick="removePuntoC(this)">✕</button></div>
+          </div>
+          <div class="row g-2 mb-2 punto-row">
+            <div class="col-5"><input class="input-dark" type="number" value="10" data-type="t"></div>
+            <div class="col-5"><input class="input-dark" type="number" value="13" data-type="p"></div>
+            <div class="col-2"><button class="btn-secondary" onclick="removePuntoC(this)">✕</button></div>
+          </div>
+          <div class="row g-2 mb-2 punto-row">
+            <div class="col-5"><input class="input-dark" type="number" value="15" data-type="t"></div>
+            <div class="col-5"><input class="input-dark" type="number" value="16" data-type="p"></div>
+            <div class="col-2"><button class="btn-secondary" onclick="removePuntoC(this)">✕</button></div>
+          </div>
+          <div class="row g-2 mb-2 punto-row">
+            <div class="col-5"><input class="input-dark" type="number" value="20" data-type="t"></div>
+            <div class="col-5"><input class="input-dark" type="number" value="19" data-type="p"></div>
+            <div class="col-2"><button class="btn-secondary" onclick="removePuntoC(this)">✕</button></div>
+          </div>
+          <div class="row g-2 mb-2 punto-row">
+            <div class="col-5"><input class="input-dark" type="number" value="30" data-type="t"></div>
+            <div class="col-5"><input class="input-dark" type="number" value="22" data-type="p"></div>
+            <div class="col-2"><button class="btn-secondary" onclick="removePuntoC(this)">✕</button></div>
+          </div>
+        </div>
+        <button class="btn-secondary" onclick="addPuntoC()" style="margin-bottom:16px;">+ Agregar punto</button>
+        <div class="row g-3 align-items-end">
+          <div class="col-md-3">
+            <label class="form-label-custom">Día a Estimar</label>
+            <input class="input-dark" type="number" id="evalC" value="7" min="1" max="30">
+            <div class="form-hint">¿Qué día quieres conocer el precio? (puede ser cualquier valor entre tus datos)</div>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label-custom">Método de Interpolación</label>
+            <select class="select-dark" id="metodC">
+              <option value="lagrange">Lagrange</option>
+              <option value="newton" selected>Newton (Dif. Divididas)</option>
+              <option value="spline">Spline Cúbico</option>
+              <option value="todos">Comparar los 3</option>
+            </select>
+          </div>
+          <div class="col-md-3 pt-2">
+            <button class="btn-run" onclick="runEscenarioC()">▶ Interpolar</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="crystal-box" id="crystalC" style="display:none;">
+        <h4>🔬 Cálculo Paso a Paso (Newton — Tabla de Diferencias Divididas)</h4>
+        <div id="crystalCContent"></div>
+      </div>
+
+      <div id="resultsC" style="display:none;">
+        <div class="stat-grid" id="statsC"></div>
+        <div class="chart-wrap">
+          <div class="chart-title">Curva de Precios Interpolada</div>
+          <canvas id="chartC"></canvas>
+        </div>
+      </div>
+
+      <div class="analysis-block" id="analysisC" style="display:none;">
+        <h3>💡 Análisis, Preguntas Guía y Conclusiones</h3>
+        <div class="qa-item">
+          <div class="qa-q">¿Cuál sería el precio aproximado en el día consultado?</div>
+          <div class="qa-a dynamic" id="qa-c1">—</div>
+        </div>
+        <div class="qa-item">
+          <div class="qa-q">¿Qué tan confiable es la interpolación?</div>
+          <div class="qa-a">La interpolación es confiable <strong>dentro del rango de los datos</strong>
+            (interpolación). Fuera de ese rango (extrapolación) los errores crecen drásticamente. Los Splines cúbicos
+            son más estables que Lagrange para datos con muchos nodos, ya que evitan las oscilaciones de Runge.</div>
+        </div>
+        <div class="qa-item">
+          <div class="qa-q">¿Qué pasa si los datos son muy dispersos?</div>
+          <div class="qa-a dynamic" id="qa-c3">—</div>
+        </div>
+        <div class="conclusion-box" id="conclusionC"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ ESCENARIO D ═══════════════════════════════════════ -->
+  <div id="secD" class="section sec-d">
+    <div class="container-main">
+      <div class="mod-header">
+        <div class="mod-tag tag-d">Escenario D · Integración Numérica</div>
+        <h1 class="mod-title">Gasto Familiar Acumulado</h1>
+        <p class="mod-subtitle">Calcula el costo mensual total de una familia cuando los precios de la canasta básica
+          crecen progresivamente</p>
+      </div>
+      <div class="divider"></div>
+
+      <div class="card-dark">
+        <div class="card-label">1 · Contexto del Escenario</div>
+        <p style="color:var(--text2); margin-bottom:12px;">
+          Cuando los precios cambian cada día, el gasto total del mes no se puede calcular con una simple multiplicación. 
+          Es el área bajo la curva de precios lo que acumula el gasto real día a día — y eso es exactamente lo que calcula 
+          la integración numérica. Este módulo compara el gasto real de una familia bajo inflación versus el gasto que habría 
+          tenido con precios estables, para cuantificar la pérdida concreta de poder adquisitivo.
+        </p>
+        <div class="narrative">
+          <p>La señora Carmen vive con su esposo y dos hijos en un barrio de clase trabajadora. Su salario familiar 
+            es de 3.500 bolivianos al mes, que hasta ahora siempre había alcanzado. Pero este mes los precios no fueron 
+            constantes: la papa que costaba 8 Bs/kg al inicio del mes llegó a 22 Bs al final. ¿Cuánto gastó Carmen en total? 
+            No es el precio promedio multiplicado por 30 días — es la acumulación día a día de un precio distinto cada jornada. 
+            La integración numérica calcula ese total con precisión.</p>
+        </div>
+      </div>
+
+      <div class="card-dark">
+        <div class="card-label">2 · El Problema Matemático</div>
+        <p style="color:var(--text2);font-size:.9rem;margin-bottom:10px;">Si P(t) es el precio diario de la canasta
+          básica y Q es la cantidad que la familia compra cada día, entonces el gasto total en el mes es la integral
+          ∫₀³⁰ Q·P(t) dt. Como no tenemos una fórmula cerrada para P(t), usamos métodos numéricos para calcular esta
+          integral a partir de datos discretos.</p>
+        <p style="color:var(--text2);font-size:.9rem;">La <strong style="color:var(--text)">Regla del Trapecio</strong>
+          aproxima el área usando trapecios. <strong style="color:var(--text)">Simpson 1/3</strong> usa parábolas (más
+          preciso). <strong style="color:var(--text)">Simpson 3/8</strong> usa polinomios de grado 3 en grupos de 3
+          intervalos.</p>
+      </div>
+
+      <div class="card-dark">
+        <div class="card-label">3 · Modelo Matemático</div>
+        <div class="math-box">
+          <span class="comment">// Gasto acumulado = integral del precio diario</span>
+          Gasto_total = ∫₀ᵀ Q · P(t) dt
+
+          <span class="comment">// Trapecio (n subintervalos):</span>
+          ∫ ≈ (h/2) · [f(t₀) + 2f(t₁) + 2f(t₂) + ... + 2f(tₙ₋₁) + f(tₙ)]
+
+          <span class="comment">// Simpson 1/3 (n par):</span>
+          ∫ ≈ (h/3) · [f(t₀) + 4f(t₁) + 2f(t₂) + 4f(t₃) + ... + f(tₙ)]
+
+          <span class="comment">// Simpson 3/8 (n múltiplo de 3):</span>
+          ∫ ≈ (3h/8) · [f(t₀) + 3f(t₁) + 3f(t₂) + 2f(t₃) + ... + f(tₙ)]
+        </div>
+      </div>
+
+      <div class="card-dark">
+        <div class="card-label">4 · Glosario de Variables</div>
+        <table class="glossary">
+          <tr>
+            <th>Variable</th>
+            <th>Significado en la vida real</th>
+            <th>Unidad</th>
+          </tr>
+          <tr>
+            <td>P(t)</td>
+            <td>Precio del producto en el día t — interpolado a partir de los datos observados en el mercado</td>
+            <td>Bs / kg</td>
+          </tr>
+          <tr>
+            <td>Q</td>
+            <td>Cantidad diaria que consume la familia de ese producto (constante asumida)</td>
+            <td>kg / día</td>
+          </tr>
+          <tr>
+            <td>T</td>
+            <td>Duración del período de análisis (un mes = 30 días)</td>
+            <td>días</td>
+          </tr>
+          <tr>
+            <td>h</td>
+            <td>Tamaño del subintervalo de integración — cuán fino es el mallado. Menor h = más preciso</td>
+            <td>días</td>
+          </tr>
+          <tr>
+            <td>n</td>
+            <td>Número de subintervalos de integración. n = (T - 0)/h</td>
+            <td>entero</td>
+          </tr>
+          <tr>
+            <td>Gasto_sin_alza</td>
+            <td>El gasto hipotético si el precio se hubiera mantenido fijo en P(0) durante todo el mes</td>
+            <td>Bs</td>
+          </tr>
+          <tr>
+            <td>Pérdida_PA</td>
+            <td>Pérdida del Poder Adquisitivo = Gasto_real − Gasto_sin_alza (dinero extra forzado a gastar)</td>
+            <td>Bs</td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="card-dark">
+        <div class="card-label">5 · Zona de Interacción</div>
+        <div class="row g-3">
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="form-label-custom">Precio inicial del producto (Bs/kg)</label>
+              <input class="input-dark" type="number" id="p0D" value="8" min="1" step="0.5">
+              <div class="form-hint">Precio al inicio del mes (día 1)</div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="form-label-custom">Precio final del producto (Bs/kg)</label>
+              <input class="input-dark" type="number" id="pfD" value="22" min="1" step="0.5">
+              <div class="form-hint">Precio al final del mes (día 30)</div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="form-label-custom">Tipo de crecimiento de precios</label>
+              <select class="select-dark" id="tipoD">
+                <option value="lineal">Lineal (sube uniformemente)</option>
+                <option value="exponencial" selected>Exponencial (sube cada vez más rápido)</option>
+                <option value="sigmoide">Sigmoide (lento, luego disparo, luego estable)</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="form-label-custom">Cantidad consumida Q (kg/día)</label>
+              <input class="input-dark" type="number" id="qD" value="1.5" min="0.1" step="0.1">
+              <div class="form-hint">Cuántos kg de este producto compra la familia por día</div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="form-label-custom">Ingreso mensual familiar (Bs)</label>
+              <input class="input-dark" type="number" id="ingresoD" value="3500" min="500" step="100">
+              <div class="form-hint">Para calcular qué porcentaje del ingreso representa el gasto en este producto</div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-group">
+              <label class="form-label-custom">Método de Integración</label>
+              <select class="select-dark" id="metodD">
+                <option value="trapecio">Regla del Trapecio</option>
+                <option value="s13" selected>Simpson 1/3</option>
+                <option value="s38">Simpson 3/8</option>
+                <option value="todos">Comparar los 3</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-12 pt-2">
+            <button class="btn-run" onclick="runEscenarioD()">▶ Calcular Gasto Acumulado</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="crystal-box" id="crystalD" style="display:none;">
+        <h4>🔬 Primeros Pasos de la Integración</h4>
+        <div id="crystalDContent"></div>
+      </div>
+
+      <div id="resultsD" style="display:none;">
+        <div class="stat-grid" id="statsD"></div>
+        <div class="row g-3">
+          <div class="col-lg-7">
+            <div class="chart-wrap">
+              <div class="chart-title">Curva de Precios y Área Integrada (Gasto)</div>
+              <canvas id="chartD"></canvas>
+            </div>
+          </div>
+          <div class="col-lg-5">
+            <div class="chart-wrap">
+              <div class="chart-title">Comparación de Métodos de Integración</div>
+              <canvas id="chartD2"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="analysis-block" id="analysisD" style="display:none;">
+        <h3>💡 Análisis, Preguntas Guía y Conclusiones</h3>
+        <div class="qa-item">
+          <div class="qa-q">¿Cuánto gastó la familia durante el mes en este producto?</div>
+          <div class="qa-a dynamic" id="qa-d1">—</div>
+        </div>
+        <div class="qa-item">
+          <div class="qa-q">¿Cuánto hubiera gastado si los precios no subían?</div>
+          <div class="qa-a dynamic" id="qa-d2">—</div>
+        </div>
+        <div class="qa-item">
+          <div class="qa-q">¿Cuál fue la pérdida del poder adquisitivo?</div>
+          <div class="qa-a dynamic" id="qa-d3">—</div>
+        </div>
+        <div class="qa-item">
+          <div class="qa-q">¿Qué método de integración fue más preciso?</div>
+          <div class="qa-a">Simpson 1/3 y 3/8 son generalmente más precisos que el trapecio porque usan polinomios de
+            mayor grado para aproximar el área. El error del trapecio es O(h²), el de Simpson es O(h⁴) — con el mismo
+            número de evaluaciones, Simpson puede ser miles de veces más preciso.</div>
+        </div>
+        <div class="conclusion-box" id="conclusionD"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ ESCENARIO E ═══════════════════════════════════════ -->
+  <div id="secE" class="section sec-e">
+    <div class="container-main">
+      <div class="mod-header">
+        <div class="mod-tag tag-e">Escenario E · Raíces de Ecuaciones</div>
+        <h1 class="mod-title">Umbrales Críticos de Abastecimiento</h1>
+        <p class="mod-subtitle">Encuentra los puntos exactos donde el sistema cruza umbrales peligrosos mediante métodos
+          de búsqueda de raíces</p>
+      </div>
+      <div class="divider"></div>
+
+      <div class="card-dark">
+        <div class="card-label">1 · Contexto del Escenario</div>
+        <p style="color:var(--text2); margin-bottom:12px;">
+          En una crisis de abastecimiento hay puntos de quiebre que lo cambian todo: el día en que el gasto familiar supera 
+          el ingreso, la tasa de reposición en que el consumo y la llegada de combustible se igualan, el precio límite a partir 
+          del cual la economía familiar colapsa. Todos estos puntos son raíces de una ecuación — el valor exacto donde una función 
+          cruza el cero, donde el sistema cambia de estado. Los métodos numéricos de búsqueda de raíces localizan esos umbrales 
+          con precisión matemática.
+        </p>
+        <div class="narrative">
+          <p>La señora Carmen lleva un registro cuidadoso de sus gastos. Sabe que sus ingresos son fijos, pero los precios 
+            del mercado han subido de forma sostenida durante el último mes. En algún punto del mes — un día exacto — su gasto 
+            acumulado igualará su ingreso total. A partir de ese día, cada compra adicional representa un déficit. La pregunta 
+            no es si ese día llegará, sino cuándo. Bisección, Newton-Raphson y otros métodos de búsqueda de raíces permiten encontrar 
+            ese día con precisión, resolviendo la ecuación gasto_acumulado(t) − ingreso = 0.</p>
+        </div>
+      </div>
+
+      <div class="card-dark">
+        <div class="card-label">2 · El Problema Matemático</div>
+        <p style="color:var(--text2);font-size:.9rem;margin-bottom:10px;">Una <strong
+            style="color:var(--text)">raíz</strong> de f(x) es el valor de x donde f(x) = 0. Si queremos encontrar el
+          punto donde el gasto supera el ingreso, definimos f(x) = Gasto(x) − Ingreso. La raíz de esta función es el
+          umbral buscado.</p>
+        <p style="color:var(--text2);font-size:.9rem;"><strong style="color:var(--text)">Bisección</strong>: divide el
+          intervalo por la mitad repetidamente. Lento pero siempre converge. <strong
+            style="color:var(--text)">Newton-Raphson</strong>: usa la derivada para saltar directo a la raíz. Muy rápido
+          pero puede divergir. <strong style="color:var(--text)">Secante</strong>: aproxima la derivada con dos puntos
+          previos, sin necesitar f'(x) explícita.</p>
+      </div>
+
+      <div class="card-dark">
+        <div class="card-label">3 · Modelo Matemático</div>
+        <div class="math-box">
+          <span class="comment">// Bisección:</span>
+          c = (a + b) / 2
+          Si f(a)·f(c) &lt; 0: b ← c, sino: a ← c
+
+          <span class="comment">// Newton-Raphson:</span>
+          xₙ₊₁ = xₙ - f(xₙ) / f'(xₙ)
+
+          <span class="comment">// Secante (sin derivada explícita):</span>
+          xₙ₊₁ = xₙ - f(xₙ)·(xₙ - xₙ₋₁) / (f(xₙ) - f(xₙ₋₁))
+
+          <span class="comment">// Función para umbral de gasto vs ingreso:</span>
+          f(t) = GastoAcumulado(t) - IngresoFamiliar
+          <span class="comment">// Raíz = día en que se agota el presupuesto mensual</span>
+        </div>
+      </div>
+
+      <div class="card-dark">
+        <div class="card-label">4 · Glosario de Variables</div>
+        <table class="glossary">
+          <tr>
+            <th>Variable</th>
+            <th>Significado en la vida real</th>
+            <th>Unidad</th>
+          </tr>
+          <tr>
+            <td>f(x)</td>
+            <td>La función cuya raíz buscamos — representa el "desequilibrio" del sistema (gasto−ingreso,
+              consumo−entrada)</td>
+            <td>varía</td>
+          </tr>
+          <tr>
+            <td>x</td>
+            <td>La variable de búsqueda (puede ser: tiempo, tasa de reposición, nivel de frustración)</td>
+            <td>varía</td>
+          </tr>
+          <tr>
+            <td>[a, b]</td>
+            <td>Intervalo inicial para Bisección — debe contener la raíz (f(a) y f(b) tienen signos opuestos)</td>
+            <td>varía</td>
+          </tr>
+          <tr>
+            <td>x₀</td>
+            <td>Punto de partida para Newton-Raphson — cuanto más cercano a la raíz, más rápido converge</td>
+            <td>varía</td>
+          </tr>
+          <tr>
+            <td>ε</td>
+            <td>Tolerancia de convergencia — el algoritmo para cuando |f(xₙ)| &lt; ε o |xₙ₊₁ − xₙ| &lt; ε</td>
+            <td>adimensional</td>
+          </tr>
+          <tr>
+            <td>Orden de convergencia</td>
+            <td>Bisección: lineal (1). Newton-Raphson: cuadrático (2) — ¡duplica dígitos correctos en cada iteración!
+            </td>
+            <td>—</td>
+          </tr>
+        </table>
+      </div>
+
+      <div class="card-dark">
+        <div class="card-label">5 · Zona de Interacción — Selecciona el Umbral a Encontrar</div>
+        <div class="row g-3">
+          <div class="col-12">
+            <label class="form-label-custom">¿Qué umbral crítico quieres encontrar?</label>
+            <div class="method-tabs" id="tipoEtabs">
+              <button class="method-tab active" onclick="selectTipoE('gasto',this)">💰 Umbral Gasto vs Ingreso</button>
+              <button class="method-tab" onclick="selectTipoE('reserva',this)">⛽ Tasa Crítica de Reposición</button>
+              <button class="method-tab" onclick="selectTipoE('social',this)">👥 Umbral Social de Tensión</button>
+            </div>
+          </div>
+          <!-- Gasto vs ingreso -->
+          <div id="paneE_gasto" class="col-12">
+            <div class="alert-info-custom">Busca el día exacto del mes en que el gasto acumulado de la familia iguala (y
+              supera) su ingreso mensual.</div>
+            <div class="row g-3">
+              <div class="col-md-3">
+                <label class="form-label-custom">Precio inicial (Bs/kg)</label>
+                <input class="input-dark" type="number" id="p0E" value="8" step="0.5">
+              </div>
+              <div class="col-md-3">
+                <label class="form-label-custom">Precio final al día 30 (Bs/kg)</label>
+                <input class="input-dark" type="number" id="pfE" value="22" step="0.5">
+              </div>
+              <div class="col-md-3">
+                <label class="form-label-custom">Cantidad diaria Q (kg/día)</label>
+                <input class="input-dark" type="number" id="qE" value="1.5" step="0.1">
+              </div>
+              <div class="col-md-3">
+                <label class="form-label-custom">Ingreso mensual familiar (Bs)</label>
+                <input class="input-dark" type="number" id="ingE" value="3500" step="100">
+              </div>
+            </div>
+          </div>
+          <!-- Reserva -->
+          <div id="paneE_reserva" class="col-12" style="display:none;">
+            <div class="alert-info-custom">Busca la tasa de entrada (% de reserva/día) exacta donde el consumo y el
+              reabastecimiento se igualan — la "tasa de equilibrio".</div>
+            <div class="row g-3">
+              <div class="col-md-4">
+                <label class="form-label-custom">Consumo base C₀ (%/día)</label>
+                <input class="input-dark" type="number" id="c0E" value="7" step="0.5">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label-custom">Factor de crecimiento de consumo α</label>
+                <input class="input-dark" type="number" id="alphaE" value="0.05" step="0.01">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label-custom">Día en que evaluar el equilibrio</label>
+                <input class="input-dark" type="number" id="tE" value="10" step="1">
+              </div>
+            </div>
+          </div>
+          <!-- Social -->
+          <div id="paneE_social" class="col-12" style="display:none;">
+            <div class="alert-info-custom">Modela la tensión social como f(x) = A·e^(βx) − M donde x es el nivel de
+              desabastecimiento percibido. Busca el umbral x* donde la tensión supera el nivel crítico M.</div>
+            <div class="row g-3">
+              <div class="col-md-4">
+                <label class="form-label-custom">Amplitud A (sensibilidad social)</label>
+                <input class="input-dark" type="number" id="aE" value="2" step="0.1">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label-custom">Tasa de escalada β</label>
+                <input class="input-dark" type="number" id="betaE" value="0.8" step="0.05">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label-custom">Umbral crítico de tensión M</label>
+                <input class="input-dark" type="number" id="mE" value="10" step="0.5">
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label-custom">Método de Búsqueda de Raíz</label>
+            <select class="select-dark" id="metodE">
+              <option value="biseccion">Bisección</option>
+              <option value="newton" selected>Newton-Raphson</option>
+              <option value="secante">Secante</option>
+              <option value="todos">Comparar los 3</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label-custom">Tolerancia ε</label>
+            <select class="select-dark" id="tolE">
+              <option value="0.01">10⁻² (rápido)</option>
+              <option value="0.0001" selected>10⁻⁴ (estándar)</option>
+              <option value="0.000001">10⁻⁶ (alta precisión)</option>
+            </select>
+          </div>
+          <div class="col-12 pt-2">
+            <button class="btn-run" onclick="runEscenarioE()">▶ Encontrar Umbral Crítico</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="crystal-box" id="crystalE" style="display:none;">
+        <h4>🔬 Iteraciones del Método Paso a Paso</h4>
+        <div id="crystalEContent"></div>
+      </div>
+
+      <div id="resultsE" style="display:none;">
+        <div class="stat-grid" id="statsE"></div>
+        <div class="row g-3">
+          <div class="col-lg-7">
+            <div class="chart-wrap">
+              <div class="chart-title">Función y Raíz Encontrada</div>
+              <canvas id="chartE"></canvas>
+            </div>
+          </div>
+          <div class="col-lg-5">
+            <div class="chart-wrap">
+              <div class="chart-title">Convergencia — Error por Iteración</div>
+              <canvas id="chartE2"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="card-dark" style="margin-top:16px;">
+          <div class="card-label">Tabla de Iteraciones</div>
+          <div style="overflow-x:auto;max-height:300px;overflow-y:auto;">
+            <table class="results-table" id="tableE"></table>
+          </div>
+        </div>
+      </div>
+
+      <div class="analysis-block" id="analysisE" style="display:none;">
+        <h3>💡 Análisis, Preguntas Guía y Conclusiones</h3>
+        <div class="qa-item">
+          <div class="qa-q">¿Dónde está el umbral crítico?</div>
+          <div class="qa-a dynamic" id="qa-e1">—</div>
+        </div>
+        <div class="qa-item">
+          <div class="qa-q">¿Qué método convergió más rápido?</div>
+          <div class="qa-a dynamic" id="qa-e2">—</div>
+        </div>
+        <div class="qa-item">
+          <div class="qa-q">¿Cuál es la diferencia práctica entre Bisección y Newton-Raphson?</div>
+          <div class="qa-a">Bisección garantiza convergencia si la raíz está en [a,b] — nunca falla, pero necesita ~3.32
+            iteraciones por dígito decimal. Newton-Raphson converge cuadráticamente (duplica dígitos correctos en cada
+            paso) pero puede diverger si x₀ está lejos de la raíz o si f'(x) es muy pequeña. Para problemas críticos
+            donde la confiabilidad importa más que la velocidad: Bisección. Para velocidad máxima con buena estimación
+            inicial: Newton.</div>
+        </div>
+        <div class="conclusion-box" id="conclusionE"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════ CONCLUSIONES ═══════════════════════════════════════ -->
+  <div id="secConcl" class="section">
+    <div class="container-main">
+      <div class="mod-header">
+        <div class="mod-tag" style="color:var(--text2)">Reflexiones Finales</div>
+        <h1 class="mod-title">Conclusiones y Aprendizajes</h1>
+        <p class="mod-subtitle">Síntesis transversal de los 5 escenarios, limitaciones del modelo y propuestas de mejora
+        </p>
+      </div>
+      <div class="divider"></div>
+      <div class="row g-4">
+        <div class="col-md-6">
+          <div class="card-dark">
+            <div class="card-label" style="color:var(--accent1)">Escenario A · Sistemas Lineales</div>
+            <p style="color:var(--text2);font-size:.9rem;">Los métodos iterativos (Gauss-Seidel, SOR) demuestran que un
+              sistema de distribución puede resolverse eficientemente sin invertir matrices explícitamente. <strong
+                style="color:var(--text)">Limitación clave:</strong> el modelo asume demandas y capacidades conocidas
+              con exactitud — en la realidad, estos datos son inciertos. Una mejora sería incorporar rangos de
+              incertidumbre (programación estocástica).</p>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card-dark">
+            <div class="card-label" style="color:var(--accent2)">Escenario B · Ecuaciones Diferenciales</div>
+            <p style="color:var(--text2);font-size:.9rem;">RK4 muestra que es posible predecir con precisión el vaciado
+              de reservas, permitiendo decisiones preventivas. <strong style="color:var(--text)">Limitación
+                clave:</strong> el modelo de consumo lineal/exponencial es una simplificación — en la realidad el
+              consumo depende del día de la semana, feriados y rumores. Una mejora sería un modelo de consumo
+              estocástico con ruido gaussiano.</p>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card-dark">
+            <div class="card-label" style="color:var(--accent3)">Escenario C · Interpolación</div>
+            <p style="color:var(--text2);font-size:.9rem;">Los Splines cúbicos ofrecen curvas más suaves y realistas que
+              Lagrange para datos de precios, evitando oscilaciones artificiosas. <strong
+                style="color:var(--text)">Limitación clave:</strong> la interpolación solo es válida dentro del rango de
+              datos; la extrapolación es especulativa. Los precios también dependen de factores externos no capturados
+              (tipo de cambio, especulación). Mejora: modelos ARIMA para series de tiempo de precios.</p>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card-dark">
+            <div class="card-label" style="color:var(--accent4)">Escenario D · Integración Numérica</div>
+            <p style="color:var(--text2);font-size:.9rem;">Simpson 1/3 demostró ser más preciso que el Trapecio con el
+              mismo número de evaluaciones, confirmando el valor de los métodos de orden superior. <strong
+                style="color:var(--text)">Limitación clave:</strong> el modelo asume cantidad de consumo constante — las
+              familias ajustan su consumo cuando los precios suben (elasticidad precio). Una mejora realista
+              incorporaría una función de demanda elástica Q(P).</p>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="card-dark">
+            <div class="card-label" style="color:var(--accent5)">Escenario E · Raíces de Ecuaciones</div>
+            <p style="color:var(--text2);font-size:.9rem;">Newton-Raphson demostró convergencia cuadrática espectacular
+              para funciones bien comportadas, mientras Bisección ofreció robustez garantizada. <strong
+                style="color:var(--text)">Limitación clave:</strong> los umbrales críticos calculados son deterministas
+              — en la realidad son difusos y dependen de percepciones sociales, no solo de datos. Mejora: combinar los
+              resultados numéricos con modelos de dinámica social para umbrales probabilísticos.</p>
+          </div>
+        </div>
+      </div>
+      <div class="card-dark" style="margin-top:24px;">
+        <div class="card-label">Aprendizaje Transversal</div>
+        <h3 style="font-family:var(--serif);font-size:1.4rem;margin-bottom:14px;">¿Qué nos enseñó esta crisis sobre los
+          métodos numéricos?</h3>
+        <div class="row g-3">
+          <div class="col-md-4">
+            <div style="padding:16px;background:var(--bg2);border-radius:10px;height:100%;">
+              <div style="font-size:1.5rem;margin-bottom:8px;">🎯</div>
+              <div style="font-weight:600;color:var(--text);margin-bottom:6px;">Ningún método es perfecto</div>
+              <div style="color:var(--text2);font-size:.85rem;">Cada método tiene su dominio óptimo. Elegir el método
+                equivocado puede dar resultados imprecisos o divergentes. El conocimiento del problema guía la elección
+                del método.</div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div style="padding:16px;background:var(--bg2);border-radius:10px;height:100%;">
+              <div style="font-size:1.5rem;margin-bottom:8px;">📐</div>
+              <div style="font-weight:600;color:var(--text);margin-bottom:6px;">Los modelos son simplificaciones</div>
+              <div style="color:var(--text2);font-size:.85rem;">Todo modelo sacrifica realismo por tractabilidad
+                matemática. La clave es identificar qué simplificaciones son aceptables para el problema en cuestión y
+                cuáles distorsionan la realidad inaceptablemente.</div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div style="padding:16px;background:var(--bg2);border-radius:10px;height:100%;">
+              <div style="font-size:1.5rem;margin-bottom:8px;">🔍</div>
+              <div style="font-weight:600;color:var(--text);margin-bottom:6px;">El análisis de sensibilidad es esencial
+              </div>
+              <div style="color:var(--text2);font-size:.85rem;">Cambiar los parámetros de esta simulación revela cuáles
+                variables tienen mayor impacto. Ese análisis de sensibilidad es tan valioso como la solución misma para
+                la toma de decisiones.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p style="margin-bottom:4px;"><strong>Desafío Final de Métodos Numéricos</strong> — Simulación de Crisis de
+      Abastecimiento</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/script.js"></script>
+</body>
+
+</html>
